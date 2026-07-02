@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "qcustomplot/qcustomplot.h"
+#include <algorithm>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -106,6 +108,7 @@ double MainWindow::getK(QString name) {
     } else if(name == "GHz") {
         return 1e9;
     }
+    return 0.0;
 }
 
 

@@ -3,8 +3,6 @@
 
 #include <QMainWindow>
 #include <QTimer>
-#include "qcustomplot/qcustomplot.h"
-#include <algorithm>
 #include <QElapsedTimer>
 
 #include "hackrfdevice.h"

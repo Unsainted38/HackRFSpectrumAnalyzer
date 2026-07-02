@@ -2,7 +2,7 @@
 #define HACKRFDEVICE_H
 
 #include <QObject>
-#include <libhackrf/hackrf.h>
+#include <hackrf.h>
 #include <QByteArray>
 #include <QMutex>
 #include <QVector>

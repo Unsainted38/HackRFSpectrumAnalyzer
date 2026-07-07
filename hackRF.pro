@@ -15,7 +15,6 @@ SOURCES += \
     qcustomplot/qcustomplot.cpp
 
 HEADERS += \
-    /hackrf.h \
     hackrfdevice.h \
     mainwindow.h \
     qcustomplot/qcustomplot.h

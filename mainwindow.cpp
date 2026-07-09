@@ -30,11 +30,14 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::updateSpectrumPlot,
             Qt::QueuedConnection);
     ui->plotSpectrum->addGraph();
+    ui->plotSpectrum->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
     ui->plotSpectrum->graph(0)->setPen(QPen(Qt::green));
     ui->plotSpectrum->xAxis->setLabel("Frequency (Hz)");
     ui->plotSpectrum->yAxis->setLabel("Amplitude (dB)");
     ui->plotSpectrum->rescaleAxes();
     ui->plotSpectrum->xAxis->setRange(device->getCenterFrequency() - device->getSampleRate() / 2, device->getCenterFrequency() + device->getSampleRate() / 2);
+    ui->plotSpectrum->replot();
+    ui->plotSpectrum->update();
 }
 
 MainWindow::~MainWindow() {
@@ -185,10 +188,9 @@ void MainWindow::onIntegralPowerReady(double pwr) {
 
 void MainWindow::updateSpectrumPlot(const QVector<double> &spectrum, double sampleRate, double centerFreq, double span) {
     if(spectrum.isEmpty() || !ui || !ui->plotSpectrum || plotTimer.elapsed() <= 50) {
-        plotTimer.restart();
         return;
     }
-
+    plotTimer.restart();
     QString unit;
     double scale;
     double offset = 0;

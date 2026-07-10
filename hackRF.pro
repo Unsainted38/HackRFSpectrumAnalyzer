@@ -24,7 +24,6 @@ FORMS += \
 
 unix {
     CONFIG += link_pkgconfig
-    PKGCONFIG += libhackrf
 
     packagesExist(libhackrf) {
         PKGCONFIG += libhackrf

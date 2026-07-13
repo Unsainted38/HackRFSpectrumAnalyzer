@@ -175,13 +175,17 @@ void MainWindow::on_Vbw_horizontalSlider_valueChanged(int value) {
 }
 
 void MainWindow::onCenterPowerReady(double pwr) {
+    static int min = -120;
+    static int max = 40;
     ui->power_label->setText(QString::number(pwr));
-    ui->power_progressBar->setValue(pwr);
+    ui->power_progressBar->setValue((pwr - min) / (qAbs(min) + qAbs(max)) * 100.0);
 }
 
 void MainWindow::onIntegralPowerReady(double pwr) {
+    static int min = -100;
+    static int max = 60;
     ui->integral_power_label->setText(QString::number(pwr));
-    ui->integral_power_progressBar->setValue(pwr);
+    ui->integral_power_progressBar->setValue((pwr - min) / (qAbs(min) + qAbs(max)) * 100.0);
 }
 
 

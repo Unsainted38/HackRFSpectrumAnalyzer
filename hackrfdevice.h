@@ -23,7 +23,7 @@ enum SpectrumType {
 };
 
 struct HackRFDeviceConfig {
-    double centerFreq = 100e6;
+    double centerFreq = 1e9;
     double sampleRate = 10e6;
     double rbw = 1e3;
     double span = 1e3;
@@ -32,7 +32,7 @@ struct HackRFDeviceConfig {
     double ySmoothingAlpha = 0.1;
     int lna = 40;
     int vga = 0;
-    SpectrumType type = SpectrumType::PowerDB;
+    SpectrumType type = SpectrumType::PowerDBm;
 };
 
 class HackRFDevice : public QObject {

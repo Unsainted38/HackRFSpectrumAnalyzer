@@ -446,6 +446,7 @@ double HackRFDevice::calculateIntegral(const QVector<double> &spectrum) {
     } else if(m_type == SpectrumType::PowerDBm) {
         return calculateIntegralPowerDBm(spectrum);
     }
+    return 0.0;
 }
 
 double HackRFDevice::calculateIntegralPowerDB(const QVector<double> &spectrum) {
@@ -546,6 +547,7 @@ double HackRFDevice::calculateCenter(const QVector<double> &spectrum) {
     } else if(m_type == SpectrumType::PowerDBm) {
         return calculateCenterPowerDBm(spectrum);
     }
+    return 0.0;
 }
 double HackRFDevice::calculateCenterPowerDB(const QVector<double> &spectrum) {
     if(spectrum.isEmpty()) {
@@ -618,15 +620,16 @@ QVector<double> HackRFDevice::calculateSpectrum(const std::vector<std::complex<d
     } else if(m_type == SpectrumType::PowerDBm) {
         return calculateSpectrumPowerDBm(iq);
     }
+    return QVector<double>();
 }
 
 QVector<double> HackRFDevice::calculateSpectrumAmplitudeDB(const std::vector<std::complex<double>> &iq) {
-    int N = m_fftSize;
+    size_t N = m_fftSize;
     fftw_complex *in = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * N);
     fftw_complex *out = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * N);
 
     // Копируем данные, заполняем нулями если iq.size() < N
-    for(int i = 0; i < N; ++i) {
+    for(size_t i = 0; i < N; ++i) {
         if(i < iq.size()) {
             in[i][0] = iq[i].real();
             in[i][1] = iq[i].imag();
@@ -641,7 +644,7 @@ QVector<double> HackRFDevice::calculateSpectrumAmplitudeDB(const std::vector<std
 
     QVector<double> spectrum(N);
 
-    for(int i = 0; i < N; ++i) {
+    for(size_t i = 0; i < N; ++i) {
         std::complex<double> c(out[i][0], out[i][1]);
         spectrum[i] = 20.0 * log10(std::abs(c) / N + 1e-12);   // амплитуда, нормализация
     }
@@ -654,12 +657,12 @@ QVector<double> HackRFDevice::calculateSpectrumAmplitudeDB(const std::vector<std
 }
 
 QVector<double> HackRFDevice::calculateSpectrumPowerDB(const std::vector<std::complex<double> > &iq) {
-    int N = m_fftSize;
+    size_t N = m_fftSize;
     fftw_complex *in = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * N);
     fftw_complex *out = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * N);
 
     // Копируем данные, заполняем нулями если iq.size() < N
-    for(int i = 0; i < N; ++i) {
+    for(size_t i = 0; i < N; ++i) {
         if(i < iq.size()) {
             in[i][0] = iq[i].real();
             in[i][1] = iq[i].imag();
@@ -674,7 +677,7 @@ QVector<double> HackRFDevice::calculateSpectrumPowerDB(const std::vector<std::co
 
     QVector<double> spectrum(N);
 
-    for(int i = 0; i < N; ++i) {
+    for(size_t i = 0; i < N; ++i) {
         std::complex<double> c(out[i][0], out[i][1]);
         spectrum[i] = 10.0 * log10(std::norm(c) / (N * N) + 1e-12);   // мощность в дБ, нормализация
     }
@@ -687,12 +690,12 @@ QVector<double> HackRFDevice::calculateSpectrumPowerDB(const std::vector<std::co
 }
 
 QVector<double> HackRFDevice::calculateSpectrumPowerDBm(const std::vector<std::complex<double> > &iq) {
-    int N = m_fftSize;
+    size_t N = m_fftSize;
     fftw_complex *in = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * N);
     fftw_complex *out = (fftw_complex *) fftw_malloc(sizeof(fftw_complex) * N);
 
     // Копируем данные, заполняем нулями если iq.size() < N
-    for(int i = 0; i < N; ++i) {
+    for(size_t i = 0; i < N; ++i) {
         if(i < iq.size()) {
             in[i][0] = iq[i].real();
             in[i][1] = iq[i].imag();
@@ -709,7 +712,7 @@ QVector<double> HackRFDevice::calculateSpectrumPowerDBm(const std::vector<std::c
 
     const double R = 50.0;
 
-    for(int i = 0; i < N; ++i) {
+    for(size_t i = 0; i < N; ++i) {
         std::complex<double> c(out[i][0], out[i][1]);
         spectrum[i] = 10.0 * log10(std::norm(c) / (N * N * R) * 1000.0 + 1e-12);   // мощность в дБм, нормализация
     }
@@ -729,6 +732,7 @@ QVector<double> HackRFDevice::movingAverageSpectrum(const QVector<double> &spect
     } else if(m_type == SpectrumType::PowerDBm) {
         return movingAverageSpectrumPowerDBm(spectrum);
     }
+    return QVector<double>();
 }
 
 QVector<double> HackRFDevice::movingAverageSpectrumAmplitudeDB(const QVector<double> &spectrumDB) {
